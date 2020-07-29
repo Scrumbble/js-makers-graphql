@@ -1,0 +1,50 @@
+enum ProjectType {
+    FRONTEND 
+    BACKEND
+    FULLSTACK
+}
+
+type Project {
+    name: String!
+    pitch: String!
+    coverImage: String!
+    createdBy: User!
+    type: ProjectType!
+    tags: [String]
+    liveUrl: String!
+    githubUrl: String
+    story: String
+}
+
+input NewProjectInput {
+    name: String!
+    pitch: String!
+    coverImage: String!
+    type: ProjectType!
+    tags: [String]
+    liveUrl: String!
+    githubUrl: String
+    story: String
+}
+
+input UpdateProjectInput {
+    name: String
+    pitch: String
+    coverImage: String
+    type: ProjectType
+    tags: [String]
+    liveUrl: String
+    githubUrl: String
+    story: String
+}
+
+extend type Query {
+    project(id: ID!): Project!
+    projects: [Project]!
+}
+
+extend type Mutation {
+    newProject(input: NewProjectInput!): Project!
+    updateProject(id: ID!, input: UpdateProjectInput!): Project!
+    removeProject(id: ID!): Project!
+}
