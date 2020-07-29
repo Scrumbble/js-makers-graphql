@@ -1,3 +1,21 @@
+# One thing to notice here is all the types and fields I have 
+# defined here are actually coming from our mongoose model, which 
+# is project.model.js in this case. 
+# You should comapre both the file and see the difference by yourself.
+
+# So whenever you make a schema like this in GraphQl, you always need to refer 
+# it's corresponding mongoose model. 
+
+# Now you might be wondering why we need to create two schemas, one 
+# using mongoose and the other using graphql which we are doing below. 
+
+# So the mongoose model lets us do something with our database but the graphql 
+# schema is more about how our client can retrieve data and how that data relates
+# to each other.
+
+
+
+
 enum ProjectType {
     FRONTEND 
     BACKEND
@@ -5,6 +23,7 @@ enum ProjectType {
 }
 
 type Project {
+    id: ID!
     name: String!
     pitch: String!
     coverImage: String!
@@ -15,7 +34,8 @@ type Project {
     githubUrl: String
     story: String
 }
-
+# Here, I'm creating a project input type that creates a new
+# project. Think of this as the create operation in the context of Express.  
 input NewProjectInput {
     name: String!
     pitch: String!
@@ -27,6 +47,9 @@ input NewProjectInput {
     story: String
 }
 
+# And here, I'm creating an update type that will update the 
+# deatils of a particular project. Think of this as the update
+# operation in the context of Express. 
 input UpdateProjectInput {
     name: String
     pitch: String
@@ -42,6 +65,16 @@ extend type Query {
     project(id: ID!): Project!
     projects: [Project]!
 }
+
+# Mutation means changing something, both literally and in 
+# the context of GraphQl. Any operation like creating, updating
+# or deleting known as Mutation.
+
+# So to be able to do this, we need to create various input types
+# that will let us perform mutation onto our server.
+
+# For that we need to send something to the server and hence we need
+# our mutation type to accept arguments. Which we what we are doing below.
 
 extend type Mutation {
     newProject(input: NewProjectInput!): Project!
