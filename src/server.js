@@ -5,14 +5,29 @@ import config from './config'
 import { connect } from './utils/db'
 import project from './types/project/project.resolvers'
 import user from './types/user/user.resolvers'
+import { agent } from 'supertest'
 
 const types = ['project', 'user']
 
 export const start = async () => {
   const rootSchema = `
+    type Cat {
+      owner: Owner!
+      name: String!
+      age: Int
+    }
+    type Owner {
+      name: String
+      cat: Cat!
+    }
+
+    type Query {
+      cat(name: String!): Cat!
+      owner(name: String!): Owner!
+    }
+
     schema {
       query: Query
-      mutation: Mutation
     }
   `
   const schemaTypes = await Promise.all(types.map(loadTypeSchema))
@@ -26,8 +41,43 @@ export const start = async () => {
      resolvers, etc to our ApolloServer instance. 
   */
   const server = new ApolloServer({
-    typeDefs: [rootSchema, ...schemaTypes],
-    resolvers: merge({}, project, user),
+    typeDefs: [rootSchema],
+    resolvers: {
+      Query: {
+        cat(_, args) {
+          console.log('in cat query');
+          return {}
+        },
+        owner(_, args) {
+          console.log('in owner query');
+          return {}
+        },
+      },
+      Cat: {
+        name() {
+          console.log('in cat name');
+          return 'Billi'
+        },
+        age() {
+          console.log('in cat age');
+          return 2
+        },
+        owner() {
+          console.log('in query resolver');
+          return {}
+        }
+      },
+      Owner: {
+        name() {
+          console.log('in owner name');
+          return 'Sourav'
+        },
+        cat() {
+          console.log('in owner cat');
+          return {}
+        }
+      }
+    },
     context({ req }) {
       // use the authenticate function from utils to auth req, its Async!
       return { user: null }

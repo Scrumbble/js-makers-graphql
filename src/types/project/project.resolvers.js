@@ -11,5 +11,11 @@
 */
 
 /* Creating a Resolver
-
+    - Resolvers need to same shape as described in the schema, or deligate to another resolver.
+    - Resolvers take a few args:
+      - starting object (the object that the parent resolver returned or a starting value from server)
+      - context ( You can think of this as shared state between all resolvers. Some examples would be user authentication, shared logic. caching storage mechanisms, database models etc.  You can also think of this as react's conext. )
+      - info (advanced AST of the incoming request. We hardly use this so don't sweat much about info.)
 */
+
+//import { Project } from  './'
