@@ -18,4 +18,56 @@
       - info (advanced AST of the incoming request. We hardly use this so don't sweat much about info.)
 */
 
-//import { Project } from  './'
+import { Project } from './project.model'
+import { User, roles } from '../user/user.model'
+import { AuthenticationError } from 'apollo-server'
+import mongoose from 'mongoose'
+
+const project = (_, args, ctx) => {
+  return Project.findById(args.id)
+    .lean()
+    .exec()
+}
+
+const projects = (_, args, ctx) => {
+  return Project.find({})
+    .lean()
+    .exec()
+}
+
+const newProject = (_, args, ctx) => {
+  const createdBy = mongoose.Types.ObjectId()
+  return Project.create({ ...args.input, createdBy })
+}
+
+const updateProject = (_, args, ctx) => {
+  const update = args.input
+  return Project.findByIdAndUpdate(args.id, update, { new: true })
+    .lean()
+    .exec()
+}
+
+const removeProject = (_, args, ctx) => {
+  return Project.findByIdAndRemove(args.id)
+    .lean()
+    .exec()
+}
+
+export default {
+  Query: {
+    projects,
+    project
+  },
+  Mutation: {
+    newProject,
+    updateProject,
+    removeProject
+  },
+  Project: {
+    createdBy(project) {
+      return User.findById(project.createdBy)
+        .lean()
+        .exec()
+    }
+  }
+}

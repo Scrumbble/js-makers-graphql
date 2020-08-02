@@ -22,16 +22,6 @@ const projectsSchema = new mongoose.Schema(
             default: 'https://via.placeholder.com/350x150',
             validate: [v => validator.isURL(v), 'Not a valid image url']
         },
-        createdBy: {
-            type: mongoose.SchemaTypes.ObjectId,
-            ref: 'user',
-            required: true
-        },
-        type: {
-            type: String,
-            required: true,
-            enum: ['FRONTEND', 'BACKEND', 'FULLSTACK']
-        },
         tags: [String],
         liveUrl: {
             type: String,
@@ -42,6 +32,11 @@ const projectsSchema = new mongoose.Schema(
         },
         story: {
             type: String
+        },
+        createdBy: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'user',
+            required: true
         }
     },
     { timestamps: true }
@@ -58,4 +53,4 @@ const projectsSchema = new mongoose.Schema(
 */
 projectsSchema.index({ user: 1, name: 1 }, { unique: true })
 
-export const Projects = mongoose.model('projects', projectsSchema)
+export const Project = mongoose.model('project', projectsSchema)
