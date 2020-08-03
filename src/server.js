@@ -19,9 +19,8 @@ export const start = async () => {
 
   /* typeDefs (short for Type Definition) are the building block that makes a schema. 
      In other words, schema is a collection of typeDefs.
-  */
-
-  /* What we are doing below is, we are creating an instance
+     
+     What we are doing below is, we are creating an instance
      of ApolloServer. Once created, we then provide all of our schema,
      resolvers, etc to our ApolloServer instance. 
   */
